@@ -1,3 +1,4 @@
 class MemberFriendship < ApplicationRecord
-  scope :friends, -> (member) { where('friend1_id = ? OR friend2_id = ?', member.id, member.id) }
+  belongs_to :friend1, foreign_key: :friend1_id, class_name: :Member
+  belongs_to :friend2, foreign_key: :friend2_id, class_name: :Member
 end
