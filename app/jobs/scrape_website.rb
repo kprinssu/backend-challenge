@@ -28,10 +28,9 @@ class ScrapeWebsite < ApplicationJob
 
     # Grab all H1 tags
     nokogiri_page.css('h3').each do |h3|
-      scraped_params[:h3].append(h3.conten.gsub(/\s+/, ""))
+      scraped_params[:h3].append(h3.content.gsub(/\s+/, ""))
     end
 
-    puts scraped_params
     ActiveRecord::Base.connection_pool.with_connection do
       member = Member.find_by(id: member_id)
       member.update(scraped_params)
