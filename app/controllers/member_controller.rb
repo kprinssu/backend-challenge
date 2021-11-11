@@ -1,5 +1,5 @@
-class V1::MemberController < ApplicationController
-  # POST /v1/member
+class MemberController < ApplicationController
+  # POST /member
   def new
     member = Member.new(new_member_params)
     begin
@@ -20,13 +20,13 @@ class V1::MemberController < ApplicationController
     render json: member_json
   end
 
-  # GET /v1/member
+  # GET /member
   def index
     members = Member.all.all_friends.select('members.id, name, shortened_url, COUNT(member_friendships) as friends').group('members.id')
     return render json: members
   end
 
-  # GET /v1/member/:id
+  # GET /member/:id
   def show
     member = Member.find_by(id: params[:id])
     if member.blank?
