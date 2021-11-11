@@ -15,7 +15,9 @@ class Member < ApplicationRecord
   end
 
   def friend_links(base_url)
-    friend_ids = MemberFriendship.where('friend1_id = ? OR friend2_id = ?', self.id, self.id).pluck(:id)
+    friend_ids = MemberFriendship.where('friend1_id = ? OR friend2_id = ?', self.id, self.id).pluck('friend1_id, friend2_id')
+    friend_ids.flatten!
+    friend_ids = friend_ids.select { |friend_id| friend_id != self.id }
     friend_ids.map { |friend_id| "#{base_url}/member/#{friend_id}"}
   end
 end
