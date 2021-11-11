@@ -11,7 +11,13 @@ class V1::MemberController < ApplicationController
       return
     end
 
-    render json: member
+    # Only show the stored values (id, name, website url)
+    member_json = {
+      id: member.id,
+      name: member.name,
+      personal_website: member.personal_website
+    }
+    render json: member_json
   end
 
   # GET /v1/member
