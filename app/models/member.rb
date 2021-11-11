@@ -8,5 +8,6 @@ class Member < ApplicationRecord
   # Run the website shortening and h* tag scraping
   after_create do
      ScrapeWebsite.perform_later(self.id, self.personal_website)
+     ShortenUrl.perform_later(self.id, self.personal_website)
   end
 end
