@@ -1,8 +1,8 @@
 class MemberController < ApplicationController
   # POST /member
   def new
-    member = Member.new(new_member_params)
     begin
+      member = Member.new(new_member_params)
       member.save!
     rescue StandardError => ex
       render status: 422, json: {

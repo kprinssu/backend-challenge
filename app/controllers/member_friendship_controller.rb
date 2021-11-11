@@ -1,9 +1,8 @@
 class MemberFriendshipController < ApplicationController
   # POST /friendships
   def new
-    friendship = MemberFriendship.new(friend1_id: params[:member_id], friend2_id: params[:friend_id])
-
     begin
+      friendship = MemberFriendship.new(friend1_id: new_friendship_params[:member_id], friend2_id: new_friendship_params[:friend_id])
       friendship.save!
     rescue StandardError => ex
       return render status: 422, json: {
