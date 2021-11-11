@@ -18,17 +18,17 @@ class ScrapeWebsite < ApplicationJob
 
     # Grab all H1 tags
     nokogiri_page.css('h1').each do |h1|
-      scraped_params[:h1].append(h1.content.gsub(/\s+/, ""))
+      scraped_params[:h1].append(h1.content.strip)
     end
 
     # Grab all H2 tags
     nokogiri_page.css('h2').each do |h2|
-      scraped_params[:h2].append(h2.content.gsub(/\s+/, ""))
+      scraped_params[:h2].append(h2.content.strip)
     end
 
     # Grab all H1 tags
     nokogiri_page.css('h3').each do |h3|
-      scraped_params[:h3].append(h3.content.gsub(/\s+/, ""))
+      scraped_params[:h3].append(h3.content.strip)
     end
 
     ActiveRecord::Base.connection_pool.with_connection do
