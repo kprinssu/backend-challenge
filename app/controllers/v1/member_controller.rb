@@ -22,8 +22,7 @@ class V1::MemberController < ApplicationController
 
   # GET /v1/member
   def index
-    members = Member.all
-
+    members = Member.all.all_friends.select('members.id, name, shortened_url, COUNT(member_friendships) as friends').group('members.id')
     return render json: members
   end
 

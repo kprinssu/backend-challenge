@@ -2,6 +2,9 @@ class Member < ApplicationRecord
   has_many :first_friendships, foreign_key: :friend1_id, class_name: :MemberFriendship
   has_many :second_friendships, foreign_key: :friend2_id, class_name: :MemberFriendship
 
+  # Scope to get friendships
+  scope :all_friends, -> { joins('LEFT JOIN member_friendships ON (members.id = member_friendships.friend1_id OR members.id = member_friendships.friend2_id)') }
+
   # Basic validation to ensure name and personal website are not nil
   validates :name, :personal_website, presence: true, allow_blank: false
 
