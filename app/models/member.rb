@@ -13,4 +13,9 @@ class Member < ApplicationRecord
      ScrapeWebsite.perform_later(self.id, self.personal_website)
      ShortenUrl.perform_later(self.id, self.personal_website)
   end
+
+  def friend_links(base_url)
+    friend_ids = MemberFriendship.where('friend1_id = ? OR friend2_id = ?', self.id, self.id).pluck(:id)
+    friend_ids.map { |friend_id| "#{base_url}/member/#{friend_id}"}
+  end
 end

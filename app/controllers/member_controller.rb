@@ -35,7 +35,12 @@ class MemberController < ApplicationController
       }
       return
     end
-    return render json: member
+
+    attributes = member.attributes
+    # This will produce an extra query
+    base_url = request.base_url
+    attributes[:friend_links] = member.friend_links(base_url)
+    return render json: attributes
   end
 
   private
