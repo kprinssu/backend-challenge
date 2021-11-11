@@ -5,24 +5,20 @@ class MemberController < ApplicationController
     begin
       member.save!
     rescue StandardError => ex
-      render json: {
-        error: ex
+      render status: 422, json: {
+        error: ex,
       }
       return
     end
 
     # Only show the stored values (id, name, website url)
-    member_json = {
-      id: member.id,
-      name: member.name,
-      personal_website: member.personal_website
-    }
+    member_json = member.attributes.slice(:id, :first_name, :last_name, :url)
     render json: member_json
   end
 
   # GET /member
   def index
-    members = Member.all.all_friends.select('members.id, name, shortened_url, COUNT(member_friendships) as friends').group('members.id')
+    members = Member.all.all_friends.select('members.id, first_name, last_name, shortened_url, COUNT(member_friendships) as friends').group('members.id')
     return render json: members
   end
 
@@ -30,7 +26,7 @@ class MemberController < ApplicationController
   def show
     member = Member.find_by(id: params[:id])
     if member.blank?
-      render json: {
+      render status: 404, json: {
         error: "Member not found not"
       }
       return
@@ -46,6 +42,6 @@ class MemberController < ApplicationController
   private
 
   def new_member_params
-    params.permit(:name, :personal_website)
+    params.require(:member).permit(:first_name, :last_name, :url)
   end
 end

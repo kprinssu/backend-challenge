@@ -6,12 +6,12 @@ class Member < ApplicationRecord
   scope :all_friends, -> { joins('LEFT JOIN member_friendships ON (members.id = member_friendships.friend1_id OR members.id = member_friendships.friend2_id)') }
 
   # Basic validation to ensure name and personal website are not nil
-  validates :name, :personal_website, presence: true, allow_blank: false
+  validates :first_name, :last_name, :url, presence: true, allow_blank: false
 
   # Run the website shortening and h* tag scraping
   after_create do
-     ScrapeWebsite.perform_later(self.id, self.personal_website)
-     ShortenUrl.perform_later(self.id, self.personal_website)
+     ScrapeWebsite.perform_later(self.id, self.url)
+     ShortenUrl.perform_later(self.id, self.url)
   end
 
   def friend_links(base_url)

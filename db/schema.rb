@@ -24,8 +24,9 @@ ActiveRecord::Schema.define(version: 20211109231913) do
   end
 
   create_table "members", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "personal_website", null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "url", null: false
     t.string "shortened_url"
     t.json "h1"
     t.json "h2"
