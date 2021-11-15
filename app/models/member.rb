@@ -23,13 +23,24 @@ class Member < ApplicationRecord
     return all_friend_ids
   end
 
+  # Gets the profile links for this member's friends
   def friend_links(base_url)
     friend_ids = self.all_friends_ids
     friend_ids.map { |friend_id| "#{base_url}/member/#{friend_id}"}
   end
 
+  # Gets the full name of this member
   def full_name
     "\'#{self.first_name} #{self.last_name}\'"
+  end
+
+  # Gets all the headings as one single array
+  def all_headings
+    headings = self.h1 || []
+    headings += self.h2 || []
+    headings += self.h3 || []
+
+    return headings
   end
 
   # This will use a slightly modified Depth-first search to find experts
@@ -47,7 +58,7 @@ class Member < ApplicationRecord
     if intial_member != self.id && !all_friend_ids.include?(intial_member)
 
       # Check if any of our headings matches the topic
-      headings = (self.h1 || []) + (self.h2 || []) + (self.h3 || [])
+      headings = all_headings
       am_expert = headings.any? { |h| h.downcase.include?(topic.downcase) }
       experts.append([self.full_name]) if am_expert
     end
