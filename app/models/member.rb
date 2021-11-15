@@ -45,9 +45,10 @@ class Member < ApplicationRecord
 
     # This member is a friend of the initial member
     if intial_member != self.id && !all_friend_ids.include?(intial_member)
+
       # Check if any of our headings matches the topic
       headings = (self.h1 || []) + (self.h2 || []) + (self.h3 || [])
-      am_expert = headings.any? { |h| h.include?(topic) }
+      am_expert = headings.any? { |h| h.downcase.include?(topic.downcase) }
       experts.append([self.full_name]) if am_expert
     end
 
