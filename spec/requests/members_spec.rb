@@ -53,6 +53,8 @@ describe 'Members', type: :request do
       subject { get "/members/#{Member.first.id}", headers: headers }
 
       it 'returns the correct status code' do
+        # Ensure the member exists
+        create :becky_smith
         subject
         expect(response).to have_http_status(:success)
       end

@@ -17,7 +17,19 @@ describe 'Friendships', type: :request do
         }
       end
 
+      it 'returns the correct status code when the members do not exist' do
+        subject
+        expect(response).to have_http_status(422)
+      end
+
       it 'returns the correct status code' do
+        # There is validation to make sure the members exist
+        friend = create :alan_smith
+        member = create :becky_smith
+
+        params[:friendship][:friend_id] = friend.id
+        params[:friendship][:member_id] = member.id
+
         subject
         expect(response).to have_http_status(:success)
       end
