@@ -32,10 +32,15 @@ class MemberController < ApplicationController
       return
     end
 
+    topic = params[:topic]
+    experts = member.find_experts(topic, member.id, [])
+    experts.map! { |expert| expert.join('->') }
+
     attributes = member.attributes
     # This will produce an extra query
     base_url = request.base_url
     attributes[:friend_links] = member.friend_links(base_url)
+    attributes[:experts] = experts
     return render json: attributes
   end
 
