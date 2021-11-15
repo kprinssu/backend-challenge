@@ -22,7 +22,7 @@ FactoryBot.define do
     end
 
     factory :carol_test do
-      first_name { 'Alan' }
+      first_name { 'Carol' }
       last_name { 'Test' }
       url { 'https://famous-teas' }
       h1 { ['Famous teas'] }

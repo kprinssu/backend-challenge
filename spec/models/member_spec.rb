@@ -31,7 +31,38 @@ RSpec.describe Member, type: :model do
     end
 
     context 'experts' do
+      it 'must return empty set for close friends' do
+        create :member_friendship, :with_friends, friend1_id: @alan_smith.id, friend2_id: @becky_smith.id
+        experts = @alan_smith.find_experts("Tea", @alan_smith.id, [])
+        expect(experts.empty?).to eq(true)
+      end
 
+      it 'must return a path when the headings match' do
+        create :member_friendship, :with_friends, friend1_id: @alan_smith.id, friend2_id: @bob_test.id
+        create :member_friendship, :with_friends, friend1_id: @becky_smith.id, friend2_id: @bob_test.id
+        experts = @alan_smith.find_experts("Tea", @alan_smith.id, [])
+
+        expected_experts = [["'Alan Smith'", "'Bob Test'", "'Becky Smith'"]]
+        experts.should match_array(expected_experts)
+      end
+
+      it 'must return multiple paths when headings match' do
+        create :member_friendship, :with_friends, friend1_id: @alan_smith.id, friend2_id: @bob_test.id
+        create :member_friendship, :with_friends, friend1_id: @becky_smith.id, friend2_id: @bob_test.id
+        create :member_friendship, :with_friends, friend1_id: @bob_test.id, friend2_id: @carol_test.id
+        experts = @alan_smith.find_experts("tea", @alan_smith.id, [])
+
+        expected_experts = [["'Alan Smith'", "'Bob Test'", "'Becky Smith'"], ["'Alan Smith'", "'Bob Test'", "'Carol Test'"]]
+        experts.should match_array(expected_experts)
+      end
+
+      it 'must return set when headings do not match' do
+        create :member_friendship, :with_friends, friend1_id: @alan_smith.id, friend2_id: @bob_test.id
+        create :member_friendship, :with_friends, friend1_id: @becky_smith.id, friend2_id: @bob_test.id
+        experts = @alan_smith.find_experts("T3a", @alan_smith.id, [])
+
+        expect(experts.empty?).to eq(true)
+      end
     end
   end
 end
